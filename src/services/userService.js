@@ -4,17 +4,9 @@ const userModel = require('../models/userModel');
 const AppError = require('../utils/AppError');
 
 /**
- * Validates basic email format.
- * @param {string} email
- * @returns {boolean}
- */
-const isValidEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-
-/**
  * Registers a new user.
+ * Note: Request payload schema validation (required fields, email format, password rules)
+ * is performed upstream by validator middleware (src/middleware/validator.js).
  *
  * @param {object} param0
  * @param {string} param0.name
@@ -23,27 +15,10 @@ const isValidEmail = (email) => {
  * @returns {Promise<object>} Safe user data without password
  */
 const registerUser = async ({ name, email, password }) => {
-  // Validate presence of required fields
-  if (!name || !email || !password) {
-    throw new AppError('Name, email, and password are required', 400, 'VALIDATION_ERROR');
-  }
-
+  const trimmedEmail = email.toLowerCase().trim();
   const trimmedName = name.trim();
-  const trimmedEmail = email.trim();
 
-  if (!trimmedName) {
-    throw new AppError('Name cannot be empty', 400, 'VALIDATION_ERROR');
-  }
-
-  if (!isValidEmail(trimmedEmail)) {
-    throw new AppError('Invalid email format', 400, 'VALIDATION_ERROR');
-  }
-
-  if (typeof password !== 'string' || password.length < 6) {
-    throw new AppError('Password must be at least 6 characters long', 400, 'VALIDATION_ERROR');
-  }
-
-  // Check for duplicate email
+  // Business condition: Check for duplicate email
   const existingUser = await userModel.findUserByEmail(trimmedEmail);
   if (existingUser) {
     throw new AppError('A user with this email already exists', 409, 'USER_ALREADY_EXISTS');
@@ -60,7 +35,7 @@ const registerUser = async ({ name, email, password }) => {
   const newUser = {
     id: userId,
     name: trimmedName,
-    email: trimmedEmail.toLowerCase(),
+    email: trimmedEmail,
     password: hashedPassword,
     createdAt,
   };
@@ -78,6 +53,8 @@ const registerUser = async ({ name, email, password }) => {
 
 /**
  * Authenticates user credentials and generates a JWT access token.
+ * Note: Request payload schema validation (required fields, email format)
+ * is performed upstream by validator middleware (src/middleware/validator.js).
  *
  * @param {object} param0
  * @param {string} param0.email
@@ -85,11 +62,7 @@ const registerUser = async ({ name, email, password }) => {
  * @returns {Promise<object>} Access token details
  */
 const loginUser = async ({ email, password }) => {
-  if (!email || !password) {
-    throw new AppError('Email and password are required', 400, 'VALIDATION_ERROR');
-  }
-
-  const trimmedEmail = email.trim();
+  const trimmedEmail = email.toLowerCase().trim();
   const user = await userModel.findUserByEmail(trimmedEmail);
 
   if (!user) {
