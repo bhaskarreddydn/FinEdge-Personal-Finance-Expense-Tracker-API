@@ -1,0 +1,129 @@
+{
+  "info": {
+    "name": "FinEdge Personal Finance & Expense Tracker API",
+    "_postman_id": "finedge-member-1-collection",
+    "description": "Postman collection showcasing Member 1 Foundation + User/Auth implementation for FinEdge API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        },
+        "description": "Public health check route to verify server status"
+      },
+      "response": []
+    },
+    {
+      "name": "Auth - Register User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Bhaskar Reddy\",\n  \"email\": \"bhaskar@example.com\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": ["{{baseUrl}}"],
+          "path": ["users"]
+        },
+        "description": "Register a new user account. Returns safe user object without password."
+      },
+      "response": []
+    },
+    {
+      "name": "Auth - Login User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var jsonData = pm.response.json();",
+              "if (jsonData.success && jsonData.data && jsonData.data.accessToken) {",
+              "    pm.collectionVariables.set('accessToken', jsonData.data.accessToken);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"bhaskar@example.com\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/users/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["users", "login"]
+        },
+        "description": "Authenticate user credentials and receive JWT access token."
+      },
+      "response": []
+    },
+    {
+      "name": "Demo - Protected Route (Requires JWT)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/demo/protected",
+          "host": ["{{baseUrl}}"],
+          "path": ["demo", "protected"]
+        },
+        "description": "Demonstrates authMiddleware verification. Returns decoded user identity attached to req.user."
+      },
+      "response": []
+    },
+    {
+      "name": "Demo - Error Handling Route",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/demo/error",
+          "host": ["{{baseUrl}}"],
+          "path": ["demo", "error"]
+        },
+        "description": "Demonstrates custom AppError routed into the centralized global error handler."
+      },
+      "response": []
+    }
+  ]
+}
