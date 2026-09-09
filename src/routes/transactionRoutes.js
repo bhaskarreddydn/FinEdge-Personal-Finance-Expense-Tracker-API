@@ -1,17 +1,25 @@
-const express = require('express');
+const express = require("express");
 
 const router = express.Router();
 
-// transactionRoutes.js
+const {
+  createTransaction,
+  getTransactions,
+  getTransaction,
+  updateTransaction,
+  deleteTransaction
+} = require("../controllers/transactionController");
 
-// Member 2:
-// Transaction routes will be implemented here.
-// Expected endpoints:
-// POST   /transactions      (create transaction)
-// GET    /transactions      (get all transactions for authenticated user)
-// GET    /transactions/:id  (get single transaction by id)
-// PATCH  /transactions/:id  (update transaction)
-// DELETE /transactions/:id  (delete transaction)
-// Note: All routes should use authMiddleware from src/middleware/authMiddleware.js
+const authMiddleware = require("../middleware/authMiddleware");
+
+router.post("/", authMiddleware, createTransaction);
+
+router.get("/", authMiddleware, getTransactions);
+
+router.get("/:id", authMiddleware, getTransaction);
+
+router.patch("/:id", authMiddleware, updateTransaction);
+
+router.delete("/:id", authMiddleware, deleteTransaction);
 
 module.exports = router;

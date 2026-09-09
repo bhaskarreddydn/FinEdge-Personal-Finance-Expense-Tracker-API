@@ -1,1 +1,65 @@
-[]
+[
+  {
+    "id": "txn_1788886940702",
+    "userId": "user_1788864680455_pbu2yq",
+    "type": "expense",
+    "category": "Food",
+    "amount": 300,
+    "date": "2026-09-02",
+    "description": "Lunch"
+  },
+  {
+    "id": "txn_1788886953413",
+    "userId": "user_1788864680455_pbu2yq",
+    "type": "expense",
+    "category": "Transport",
+    "amount": 200,
+    "date": "2026-09-03",
+    "description": "Bus fare"
+  },
+  {
+    "id": "txn_1788886962760",
+    "userId": "user_1788864680455_pbu2yq",
+    "type": "income",
+    "category": "Salary",
+    "amount": 25000,
+    "date": "2026-09-01",
+    "description": "Monthly salary"
+  },
+  {
+    "id": "txn_1788887011370",
+    "userId": "user_1788864680455_pbu2yq",
+    "type": "expense",
+    "category": "Shopping",
+    "amount": 1200,
+    "date": "2026-09-05",
+    "description": "New clothes"
+  },
+  {
+    "id": "txn_1788887019028",
+    "userId": "user_1788864680455_pbu2yq",
+    "type": "income",
+    "category": "Freelance",
+    "amount": 5000,
+    "date": "2026-09-06",
+    "description": "Website project"
+  },
+  {
+    "id": "txn_1788887026249",
+    "userId": "user_1788864680455_pbu2yq",
+    "type": "expense",
+    "category": "Entertainment",
+    "amount": 500,
+    "date": "2026-09-07",
+    "description": "Movie"
+  },
+  {
+    "id": "txn_1788962808441",
+    "userId": "user_1788961692624_golm1u",
+    "type": "expense",
+    "category": "Shopping",
+    "amount": 1400,
+    "date": "2026-09-09",
+    "description": "Toys"
+  }
+]

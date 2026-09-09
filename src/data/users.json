@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "id": "user_1788961692624_golm1u",
+    "name": "Bhaskar Reddy",
+    "email": "bhaskar@example.com",
+    "password": "$2a$10$WZ4e99j6fFEGsrrB9EOW/OtBIP/xC4nCTsPwO59Se3ZqCQ57jBwqm",
+    "createdAt": "2026-09-09T13:48:12.624Z"
+  }
+]

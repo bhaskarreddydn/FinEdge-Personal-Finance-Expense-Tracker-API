@@ -1,7 +1,22 @@
-// transactionModel.js
+const fs = require("fs").promises;
+const path = require("path");
 
-// Member 2:
-// Transaction data persistence operations (reading and writing to src/data/transactions.json)
-// will be implemented here using fs/promises.
+const filePath = path.join(__dirname, "../data/transactions.json");
 
-module.exports = {};
+const readTransactions = async () => {
+  const data = await fs.readFile(filePath, "utf-8");
+
+  return JSON.parse(data);
+};
+
+const writeTransactions = async (transactions) => {
+  await fs.writeFile(
+    filePath,
+    JSON.stringify(transactions, null, 2)
+  );
+};
+
+module.exports = {
+  readTransactions,
+  writeTransactions
+};
