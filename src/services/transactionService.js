@@ -124,4 +124,4 @@ module.exports = {
   getTransaction,
   updateTransaction,
   deleteTransaction
-}; 
+};

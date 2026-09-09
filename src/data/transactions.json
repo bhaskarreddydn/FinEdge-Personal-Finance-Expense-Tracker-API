@@ -52,5 +52,14 @@
     "amount": 500,
     "date": "2026-09-07",
     "description": "Movie"
+  },
+  {
+    "id": "txn_1788962808441",
+    "userId": "user_1788961692624_golm1u",
+    "type": "expense",
+    "category": "Shopping",
+    "amount": 1400,
+    "date": "2026-09-09",
+    "description": "Toys"
   }
 ]
