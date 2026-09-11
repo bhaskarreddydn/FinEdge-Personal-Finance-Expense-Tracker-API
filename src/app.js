@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // Middleware imports
+const buildCorsMiddleware = require('./middleware/corsOptions');
+const { apiLimiter } = require('./middleware/rateLimiter');
 const logger = require('./middleware/logger');
 const notFoundHandler = require('./middleware/notFoundHandler');
 const errorHandler = require('./middleware/errorHandler');
@@ -21,8 +23,15 @@ const { sendSuccess } = require('./utils/response');
 const app = express();
 
 // Core middlewares
+app.use(buildCorsMiddleware());
 app.use(express.json());
 app.use(logger);
+
+// Rate limiting is registered after the logger so rejected requests are still
+// logged, and skipped under test so the suite cannot exhaust the quota.
+if (process.env.NODE_ENV !== 'test') {
+  app.use(apiLimiter);
+}
 
 // Health check endpoint (Public)
 app.get('/health', (req, res) => {
