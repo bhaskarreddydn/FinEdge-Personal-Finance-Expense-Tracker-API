@@ -1,13 +1,14 @@
 const express = require('express');
+const summaryController = require('../controllers/summaryController');
+const authMiddleware = require('../middleware/authMiddleware');
+const { validateTransactionQuery } = require('../middleware/validator');
 
 const router = express.Router();
 
-// summaryRoutes.js
-
-// Member 4:
-// Summary and analytics routes will be implemented here.
-// Expected endpoint:
-// GET /summary (retrieve financial summary and metrics for authenticated user)
-// Note: Route should use authMiddleware from src/middleware/authMiddleware.js
+/**
+ * Summary Routes (Member 1 - Bhaskar)
+ * GET /summary - Retrieve financial summary and metrics for the authenticated user.
+ */
+router.get('/', authMiddleware, validateTransactionQuery, summaryController.getSummary);
 
 module.exports = router;

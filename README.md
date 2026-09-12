@@ -2,7 +2,11 @@
 
 A modular, lightweight RESTful API for personal finance and expense tracking built with **Node.js**, **Express.js**, **JSON file persistence** (`fs/promises`), and **JWT authentication**.
 
-This project is organized as a collaborative 4-member system architecture. This repository contains the **complete application foundation and Member 1 (User / Authentication & Core Infrastructure)** implementation.
+This project is organized as a collaborative 4-member system architecture developed by:
+- **Member 1 (Bhaskar)**: Application Foundation, Architecture, User Registration & Auth, Financial Summary, Analytics, Postman Collection
+- **Member 2 (Sanjana)**: Transactions CRUD, Category Assignment, User Transaction Isolation
+- **Member 3 (Komathi)**: Input Validation, Custom Error Classes, Request Logging, CORS, Rate Limiting
+- **Member 4 (Sangram)**: Comprehensive Automated Testing Suite across all endpoints and services
 
 ---
 
@@ -23,12 +27,12 @@ This project is organized as a collaborative 4-member system architecture. This 
 
 ## 👥 Group Project Architecture & Ownership
 
-| Member | Responsibility Area | Status | Files / Modules |
-| :--- | :--- | :--- | :--- |
-| **Member 1 (Current)** | **Application Foundation, Architecture, User Registration, Login, JWT Auth, Global Error Handling, Request Logger, JSON Persistence, Testing** | **Implemented & Tested** | `src/app.js`, `src/server.js`, `src/routes/userRoutes.js`, `src/controllers/userController.js`, `src/services/userService.js`, `src/models/userModel.js`, `src/middleware/authMiddleware.js`, `src/middleware/logger.js`, `src/middleware/errorHandler.js`, `src/middleware/notFoundHandler.js`, `src/utils/AppError.js`, `src/utils/response.js`, `src/controllers/demoController.js`, `src/routes/demoRoutes.js` |
-| **Member 2** | Transactions CRUD, Category Assignment, User Transaction Isolation | *Skeleton Placeholder Ready* | `src/routes/transactionRoutes.js`, `src/controllers/transactionController.js`, `src/services/transactionService.js`, `src/models/transactionModel.js`, `src/data/transactions.json` |
-| **Member 3** | **Input Validation, Custom Error Classes, Request Logging, CORS, Rate Limiting** | **Implemented & Tested** | `src/middleware/validator.js`, `src/middleware/rateLimiter.js`, `src/middleware/corsOptions.js`, `src/middleware/logger.js`, `src/utils/errors.js`, `tests/middleware.test.js` |
-| **Member 4** | Financial Summary, Analytics, Monthly Trends, AI Insights | *Skeleton Placeholder Ready* | `src/routes/summaryRoutes.js`, `src/utils/analytics.js`, `src/utils/aiHelper.js` |
+| Member | Name | Responsibility Area | Status | Files / Modules |
+| :--- | :--- | :--- | :--- | :--- |
+| **Member 1** | **Bhaskar** | **Application Foundation, Architecture, User Auth, Financial Summary, Analytics, Postman Collection** | **Implemented & Tested** | `src/app.js`, `src/server.js`, `src/routes/userRoutes.js`, `src/controllers/userController.js`, `src/services/userService.js`, `src/models/userModel.js`, `src/routes/summaryRoutes.js`, `src/controllers/summaryController.js`, `src/services/summaryService.js`, `src/utils/analytics.js`, `src/utils/aiHelper.js`, `src/middleware/authMiddleware.js`, `src/middleware/logger.js`, `src/middleware/errorHandler.js`, `src/middleware/notFoundHandler.js`, `src/utils/AppError.js`, `src/utils/response.js`, `postman_collection.json`, `src/controllers/demoController.js`, `src/routes/demoRoutes.js` |
+| **Member 2** | **Sanjana** | **Transactions CRUD, Category Assignment, User Transaction Isolation** | **Implemented & Tested** | `src/routes/transactionRoutes.js`, `src/controllers/transactionController.js`, `src/services/transactionService.js`, `src/models/transactionModel.js`, `src/data/transactions.json` |
+| **Member 3** | **Komathi** | **Input Validation, Custom Error Classes, Request Logging, CORS, Rate Limiting** | **Implemented & Tested** | `src/middleware/validator.js`, `src/middleware/rateLimiter.js`, `src/middleware/corsOptions.js`, `src/middleware/logger.js`, `src/utils/errors.js` |
+| **Member 4** | **Sangram** | **Comprehensive Automated Testing & QA Suite (All Module Test Cases)** | **Implemented & Tested** | `tests/health.test.js`, `tests/auth.test.js`, `tests/demo.test.js`, `tests/middleware.test.js`, `tests/transaction.test.js`, `tests/summary.test.js` |
 
 ---
 
@@ -52,21 +56,23 @@ finedge/
 │   ├── routes/
 │   │   ├── userRoutes.js               # POST /users, POST /users/login
 │   │   ├── demoRoutes.js               # GET /demo/protected, GET /demo/error
-│   │   ├── transactionRoutes.js        # Transaction CRUD (validated by Member 3 middleware)
-│   │   └── summaryRoutes.js            # [Member 4 Placeholder]
+│   │   ├── transactionRoutes.js        # Transaction CRUD routes (GET, POST, PATCH, DELETE)
+│   │   └── summaryRoutes.js            # GET /summary
 │   │
 │   ├── controllers/
 │   │   ├── userController.js           # Handles user registration and login
 │   │   ├── demoController.js           # Demonstrates auth verification and AppError
-│   │   └── transactionController.js    # [Member 2 Placeholder]
+│   │   ├── transactionController.js    # Handles transaction operations
+│   │   └── summaryController.js        # Handles summary calculations
 │   │
 │   ├── services/
-│   │   ├── userService.js              # Business logic: hashing, JWT issuance, validation
-│   │   └── transactionService.js       # [Member 2 Placeholder]
+│   │   ├── userService.js              # User logic: password hashing, JWT issuance
+│   │   ├── transactionService.js       # Transaction CRUD & query filtering
+│   │   └── summaryService.js           # Aggregation of user transactions for summary
 │   │
 │   ├── models/
 │   │   ├── userModel.js                # Async fs/promises persistence for users
-│   │   └── transactionModel.js         # [Member 2 Placeholder]
+│   │   └── transactionModel.js         # Async fs/promises persistence for transactions
 │   │
 │   ├── middleware/
 │   │   ├── authMiddleware.js           # Bearer JWT verification, populates req.user
@@ -81,8 +87,8 @@ finedge/
 │   │   ├── AppError.js                 # Reusable custom application error class
 │   │   ├── errors.js                   # Semantic error subclasses (Validation, NotFound, Conflict...)
 │   │   ├── response.js                 # Standardized success/error JSON response builders
-│   │   ├── analytics.js                # [Member 4 Placeholder]
-│   │   └── aiHelper.js                 # [Member 4 Placeholder]
+│   │   ├── analytics.js                # Financial metrics & balance calculation
+│   │   └── aiHelper.js                 # AI Helper utility placeholder
 │   │
 │   └── data/
 │       ├── users.json                  # JSON file persistence for users
@@ -92,7 +98,9 @@ finedge/
     ├── health.test.js                  # Health check and 404 tests
     ├── auth.test.js                    # Registration, login, duplicate check tests
     ├── demo.test.js                    # Protected auth and error handler tests
-    └── middleware.test.js              # Validation, error classes, CORS, rate limit tests
+    ├── middleware.test.js              # Validation, error classes, CORS, rate limit tests
+    ├── transaction.test.js             # Transaction CRUD and isolation tests
+    └── summary.test.js                 # Summary calculation and filter tests
 ```
 
 ---
@@ -322,7 +330,7 @@ All endpoints in FinEdge conform to a unified JSON response contract.
 
 ---
 
-## 🛡 Middleware, Validation & Error Handling (Member 3)
+## 🛡 Middleware, Validation & Error Handling (Member 3: Komathi)
 
 ### Middleware execution order
 
@@ -451,7 +459,7 @@ curl -X PATCH http://localhost:5000/transactions/txn_123 \
 
 ---
 
-## 🔒 Architectural Contract for Team Members 2, 3, and 4
+## 🔒 Architectural Contract for Team Members (Bhaskar, Sanjana, Komathi, Sangram)
 
 1. **User Identity Access**:
    All protected routes protected by `authMiddleware` automatically have access to:
@@ -461,7 +469,7 @@ curl -X PATCH http://localhost:5000/transactions/txn_123 \
      email: "user@example.com"
    };
    ```
-   Members 2 and 4 do **NOT** need to decode or parse JWT tokens manually. Simply consume `req.user.id` to scope transactions and summaries to the authenticated user.
+   Downstream controllers do **NOT** need to decode or parse JWT tokens manually. Simply consume `req.user.id` to scope transactions and summaries to the authenticated user.
 
 2. **Consistent Error Throwing**:
    Throw `AppError` from controllers or services to return structured errors:
@@ -478,3 +486,192 @@ curl -X PATCH http://localhost:5000/transactions/txn_123 \
 
    return sendSuccess(res, 200, transactionData, "Transaction retrieved successfully");
    ```
+
+---
+
+## 💳 Transactions API (Member 2: Sanjana)
+
+All transaction routes require `Authorization: Bearer <accessToken>`.
+
+### 1. Add Transaction (Income or Expense)
+- **Endpoint**: `POST /transactions`
+- **Headers**: `Authorization: Bearer <token>`, `Content-Type: application/json`
+- **Request Body**:
+  ```json
+  {
+    "type": "income",
+    "category": "Salary",
+    "amount": 50000,
+    "date": "2026-09-01",
+    "description": "Monthly Salary"
+  }
+  ```
+- **Response (201 Created)**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "id": "txn_1725683200000",
+      "userId": "user_1725682800000_abc123",
+      "type": "income",
+      "category": "Salary",
+      "amount": 50000,
+      "date": "2026-09-01",
+      "description": "Monthly Salary"
+    }
+  }
+  ```
+
+### 2. Fetch All Transactions (With Optional Filtering)
+- **Endpoint**: `GET /transactions`
+- **Query Parameters**:
+  - `type`: `income` or `expense`
+  - `category`: string (e.g. `Food`)
+  - `startDate`: `YYYY-MM-DD`
+  - `endDate`: `YYYY-MM-DD`
+- **Response (200 OK)**:
+  ```json
+  {
+    "success": true,
+    "data": [
+      {
+        "id": "txn_1725683200000",
+        "userId": "user_1725682800000_abc123",
+        "type": "income",
+        "category": "Salary",
+        "amount": 50000,
+        "date": "2026-09-01",
+        "description": "Monthly Salary"
+      }
+    ]
+  }
+  ```
+
+### 3. View Single Transaction
+- **Endpoint**: `GET /transactions/:id`
+- **Response (200 OK)**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "id": "txn_1725683200000",
+      "userId": "user_1725682800000_abc123",
+      "type": "income",
+      "category": "Salary",
+      "amount": 50000,
+      "date": "2026-09-01",
+      "description": "Monthly Salary"
+    }
+  }
+  ```
+
+### 4. Update Transaction
+- **Endpoint**: `PATCH /transactions/:id`
+- **Request Body** (partial updates allowed):
+  ```json
+  {
+    "amount": 55000,
+    "description": "Salary with bonus"
+  }
+  ```
+- **Response (200 OK)**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "id": "txn_1725683200000",
+      "userId": "user_1725682800000_abc123",
+      "type": "income",
+      "category": "Salary",
+      "amount": 55000,
+      "date": "2026-09-01",
+      "description": "Salary with bonus"
+    }
+  }
+  ```
+
+### 5. Delete Transaction
+- **Endpoint**: `DELETE /transactions/:id`
+- **Response (200 OK)**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "id": "txn_1725683200000",
+      "userId": "user_1725682800000_abc123",
+      "type": "income",
+      "category": "Salary",
+      "amount": 55000,
+      "date": "2026-09-01",
+      "description": "Salary with bonus"
+    }
+  }
+  ```
+
+---
+
+## 📊 Summary API (Member 1: Bhaskar)
+
+Requires `Authorization: Bearer <accessToken>`.
+
+### Fetch Financial Summary
+- **Endpoint**: `GET /summary` (or `GET /api/summary`)
+- **Query Parameters (Optional)**: `category`, `type`, `startDate`, `endDate`
+- **Description**: Computes total income, total expenses, net balance, and category-wise totals for the authenticated user.
+- **Response (200 OK)**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "totalIncome": 50000,
+      "totalExpense": 12000,
+      "balance": 38000,
+      "transactionCount": 5,
+      "categoryBreakdown": {
+        "Salary": {
+          "total": 50000,
+          "count": 1
+        },
+        "Food": {
+          "total": 4000,
+          "count": 3
+        },
+        "Rent": {
+          "total": 8000,
+          "count": 1
+        }
+      }
+    }
+  }
+  ```
+
+---
+
+## 🌟 Bonus Features Implemented (20 Points)
+
+1. **Option C: Data Persistence (JSON File Storage)**:
+   - Full persistence using Node.js built-in `fs/promises` (`users.json`, `transactions.json`).
+   - File reads and writes are asynchronous, safe against missing files (`ENOENT`), and isolated by authenticated user.
+
+2. **Option D: Advanced Middleware**:
+   - **Rate Limiting**: Configurable per-IP rate limiting using `express-rate-limit` with custom `TooManyRequestsError` responses.
+   - **CORS Support**: Origin whitelist configuration via `CORS_ORIGIN` environment variable.
+   - **Request Logging**: Automated request logging with timestamp, HTTP method, URL, status code, latency, and user identification.
+
+---
+
+## 🧪 Automated Testing Suite (Member 4: Sangram)
+
+Member 4 (Sangram) authored the comprehensive test suite covering all endpoints, middleware pipelines, authentication edge cases, transaction operations, and financial summary calculations:
+
+```bash
+npm test
+```
+
+All 6 test suites pass with 100% success:
+- `tests/health.test.js`: Public health check and 404 handler
+- `tests/auth.test.js`: User registration, password hashing, login, JWT issuance
+- `tests/demo.test.js`: Protected route access and global error handling
+- `tests/middleware.test.js`: Input validation, rate limiting, and CORS
+- `tests/transaction.test.js`: Transaction CRUD, validation, and user data isolation
+- `tests/summary.test.js`: Financial summary calculation, category breakdowns, and query filters

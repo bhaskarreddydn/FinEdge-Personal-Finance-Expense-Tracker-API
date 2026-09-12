@@ -1,8 +1,8 @@
 {
   "info": {
     "name": "FinEdge Personal Finance & Expense Tracker API",
-    "_postman_id": "finedge-member-1-collection",
-    "description": "Postman collection showcasing Member 1 Foundation + User/Auth implementation for FinEdge API.",
+    "_postman_id": "finedge-complete-collection",
+    "description": "Complete Postman collection for FinEdge API covering Authentication, Transactions, and Financial Summary.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -15,6 +15,11 @@
       "key": "accessToken",
       "value": "",
       "type": "string"
+    },
+    {
+      "key": "transactionId",
+      "value": "",
+      "type": "string"
     }
   ],
   "item": [
@@ -25,8 +30,12 @@
         "header": [],
         "url": {
           "raw": "{{baseUrl}}/health",
-          "host": ["{{baseUrl}}"],
-          "path": ["health"]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "health"
+          ]
         },
         "description": "Public health check route to verify server status"
       },
@@ -48,8 +57,12 @@
         },
         "url": {
           "raw": "{{baseUrl}}/users",
-          "host": ["{{baseUrl}}"],
-          "path": ["users"]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users"
+          ]
         },
         "description": "Register a new user account. Returns safe user object without password."
       },
@@ -85,15 +98,284 @@
         },
         "url": {
           "raw": "{{baseUrl}}/users/login",
-          "host": ["{{baseUrl}}"],
-          "path": ["users", "login"]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "login"
+          ]
         },
-        "description": "Authenticate user credentials and receive JWT access token."
+        "description": "Authenticate user credentials and automatically save JWT access token into collection variable."
       },
       "response": []
     },
     {
-      "name": "Demo - Protected Route (Requires JWT)",
+      "name": "Transactions - Add Income",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var jsonData = pm.response.json();",
+              "if (jsonData.success && jsonData.data && jsonData.data.id) {",
+              "    pm.collectionVariables.set('transactionId', jsonData.data.id);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"income\",\n  \"category\": \"Salary\",\n  \"amount\": 50000,\n  \"date\": \"2026-09-01\",\n  \"description\": \"Monthly Salary\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/transactions",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "transactions"
+          ]
+        },
+        "description": "Add an income transaction for the authenticated user."
+      },
+      "response": []
+    },
+    {
+      "name": "Transactions - Add Expense",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"expense\",\n  \"category\": \"Food\",\n  \"amount\": 1200,\n  \"date\": \"2026-09-05\",\n  \"description\": \"Team dinner\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/transactions",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "transactions"
+          ]
+        },
+        "description": "Add an expense transaction for the authenticated user."
+      },
+      "response": []
+    },
+    {
+      "name": "Transactions - Fetch All",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/transactions",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "transactions"
+          ]
+        },
+        "description": "Fetch all transactions belonging to the authenticated user."
+      },
+      "response": []
+    },
+    {
+      "name": "Transactions - Filter (Category & Type)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/transactions?type=expense&category=Food",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "transactions"
+          ],
+          "query": [
+            {
+              "key": "type",
+              "value": "expense"
+            },
+            {
+              "key": "category",
+              "value": "Food"
+            }
+          ]
+        },
+        "description": "Filter user transactions by category, type, or date range."
+      },
+      "response": []
+    },
+    {
+      "name": "Transactions - View Single",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/transactions/{{transactionId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "transactions",
+            "{{transactionId}}"
+          ]
+        },
+        "description": "Fetch details of a single transaction by ID."
+      },
+      "response": []
+    },
+    {
+      "name": "Transactions - Update",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 1400,\n  \"description\": \"Team dinner and drinks\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/transactions/{{transactionId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "transactions",
+            "{{transactionId}}"
+          ]
+        },
+        "description": "Partially update an existing transaction."
+      },
+      "response": []
+    },
+    {
+      "name": "Transactions - Delete",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/transactions/{{transactionId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "transactions",
+            "{{transactionId}}"
+          ]
+        },
+        "description": "Delete a transaction by ID."
+      },
+      "response": []
+    },
+    {
+      "name": "Summary - Fetch Income-Expense Summary",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/summary",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "summary"
+          ]
+        },
+        "description": "Fetch overall total income, total expense, net balance, and category breakdown for authenticated user."
+      },
+      "response": []
+    },
+    {
+      "name": "Summary - Filter by Category",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/summary?category=Food",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "summary"
+          ],
+          "query": [
+            {
+              "key": "category",
+              "value": "Food"
+            }
+          ]
+        },
+        "description": "Fetch filtered summary for a specific category or date range."
+      },
+      "response": []
+    },
+    {
+      "name": "Demo - Protected Route",
       "request": {
         "method": "GET",
         "header": [
@@ -104,10 +386,15 @@
         ],
         "url": {
           "raw": "{{baseUrl}}/demo/protected",
-          "host": ["{{baseUrl}}"],
-          "path": ["demo", "protected"]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "demo",
+            "protected"
+          ]
         },
-        "description": "Demonstrates authMiddleware verification. Returns decoded user identity attached to req.user."
+        "description": "Demonstrates authMiddleware verification. Returns decoded user identity."
       },
       "response": []
     },
@@ -118,8 +405,13 @@
         "header": [],
         "url": {
           "raw": "{{baseUrl}}/demo/error",
-          "host": ["{{baseUrl}}"],
-          "path": ["demo", "error"]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "demo",
+            "error"
+          ]
         },
         "description": "Demonstrates custom AppError routed into the centralized global error handler."
       },
