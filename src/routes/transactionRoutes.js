@@ -12,13 +12,19 @@ const {
 
 const authMiddleware = require("../middleware/authMiddleware");
 
-router.post("/", authMiddleware, createTransaction);
+const {
+  validateCreateTransaction,
+  validateUpdateTransaction,
+  validateTransactionQuery
+} = require("../middleware/validator");
 
-router.get("/", authMiddleware, getTransactions);
+router.post("/", authMiddleware, validateCreateTransaction, createTransaction);
+
+router.get("/", authMiddleware, validateTransactionQuery, getTransactions);
 
 router.get("/:id", authMiddleware, getTransaction);
 
-router.patch("/:id", authMiddleware, updateTransaction);
+router.patch("/:id", authMiddleware, validateUpdateTransaction, updateTransaction);
 
 router.delete("/:id", authMiddleware, deleteTransaction);
 
